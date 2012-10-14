@@ -9,6 +9,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import dries007.SimpleCore.SimpleCore;
@@ -56,7 +57,20 @@ public class SimpleRegionsPlugin implements IFMLLoadingPlugin, IFMLCallHook
 
 	private void addOverrides() 
 	{
-		
+		if(ObfuscationReflectionHelper.obfuscation)
+		{
+			SimpleRegionsTransformer.addClassOverride("afy", "Needed to protect from fire.");
+			SimpleRegionsTransformer.addClassOverride("gz", "Needed to protect from players.");
+			SimpleRegionsTransformer.addClassOverride("ahr", "Needed to protect from growth.");
+			SimpleRegionsTransformer.addClassOverride("um", "Needed to protect from explosions.");
+		}
+		else
+		{
+			SimpleRegionsTransformer.addClassOverride("net.minecraft.src.BlockFire", "Needed to protect from fire.");
+			SimpleRegionsTransformer.addClassOverride("net.minecraft.src.NetServerHandler", "Needed to protect from players.");
+			SimpleRegionsTransformer.addClassOverride("net.minecraft.src.BlockSapling", "Needed to protect from growth.");
+			SimpleRegionsTransformer.addClassOverride("net.minecraft.src.Explosion", "Needed to protect from explosions.");
+		}
 	}
 
 	@Override
