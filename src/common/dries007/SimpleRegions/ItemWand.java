@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.*;
@@ -74,14 +75,19 @@ public class ItemWand extends Item
 	
 	public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPlayer player) 
     {
-		if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return false;
-		
+		if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return true;
+			
 		if(stack.getItemDamage()==0)
 		{
 			stack.setItemDamage(1);
 		}
 		
 		NBTTagCompound tag = stack.getTagCompound();
+		
+		if(tag==null)
+		{
+			tag = new NBTTagCompound();
+		}
 		
 		if(tag.getInteger("dim")!=player.dimension)
 		{
@@ -94,9 +100,10 @@ public class ItemWand extends Item
 			pos1.setInteger("Z", Z);
 		tag.setCompoundTag("pos1", pos1);
 		tag.setInteger("dim", player.dimension);
-		
+			
 		player.sendChatToPlayer("Pos1: X=" + X + " Y=" + Y + " Z=" + Z);
-		
+			
+		stack.setTagCompound(tag);
 		return true;
     }
 	
