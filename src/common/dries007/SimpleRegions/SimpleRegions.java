@@ -125,7 +125,7 @@ public class SimpleRegions extends DummyModContainer
 		ServerCommandManager manager = ((ServerCommandManager) commandManager); 
 		
 		manager.registerCommand(new CommandSet());
-		manager.registerCommand(new CommandSave());
+		manager.registerCommand(new CommandRegion());
 		manager.registerCommand(new CommandMembers());
 		manager.registerCommand(new CommandRegen());
 		manager.registerCommand(new CommandExpand());
