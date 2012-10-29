@@ -56,8 +56,7 @@ public class BlockSapling extends BlockFlower
      */
     public void growTree(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	if(dries007.SimpleRegions.regions.VanillaInterface.hasTag(par1World, par2, par3, par4, "nogrowth")) return;
-    	
+		if(dries007.SimpleRegions.regions.VanillaInterface.hasTag(par1World, par2, par3, par4, "nogrowth")) return;
         int var6 = par1World.getBlockMetadata(par2, par3, par4) & 3;
         Object var7 = null;
         int var8 = 0;
@@ -148,7 +147,7 @@ public class BlockSapling extends BlockFlower
     /**
      * Determines the damage on the item the block drops. Used in cloth and wood.
      */
-    protected int damageDropped(int par1)
+    public int damageDropped(int par1)
     {
         return par1 & 3;
     }
