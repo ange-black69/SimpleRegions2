@@ -2,6 +2,7 @@ package dries007.SimpleRegions.commands;
 
 import java.util.List;
 
+import dries007.SimpleCore.Permissions;
 import dries007.SimpleCore.SimpleCore;
 import dries007.SimpleCore.data;
 import dries007.SimpleRegions.SimpleRegions;
@@ -100,8 +101,8 @@ public class CommandMembers extends CommandBase
 		}
 	}
 		
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
-	{
-		return true;
-	}
+	public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SR.all");
+    }
 }

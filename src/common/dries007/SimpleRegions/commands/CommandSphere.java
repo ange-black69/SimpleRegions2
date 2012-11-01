@@ -94,9 +94,9 @@ public class CommandSphere extends CommandBase
     	
     }
     
-    public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
     {
-        return true;
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SR.all");
     }
 
 }

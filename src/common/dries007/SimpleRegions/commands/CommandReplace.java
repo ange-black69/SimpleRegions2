@@ -35,9 +35,9 @@ public class CommandReplace extends CommandBase
         return "test <oldID>[:oldData] <newID>[:newID]";
     }
     
-    public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
     {
-        return true;
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SR.all");
     }
 
     public void processCommand(ICommandSender sender, String[] args)

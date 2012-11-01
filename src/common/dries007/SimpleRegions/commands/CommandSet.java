@@ -8,6 +8,7 @@ import java.util.Random;
 
 import cpw.mods.fml.common.FMLLog;
 
+import dries007.SimpleCore.Permissions;
 import dries007.SimpleRegions.SimpleRegions;
 import dries007.SimpleRegions.actions.*;
 
@@ -49,10 +50,10 @@ public class CommandSet extends CommandBase
 		}
 	}
 		
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
-	{
-		return true;
-	}
+	public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SR.all");
+    }
 	
 	public String getCommand(String[] args)
 	{

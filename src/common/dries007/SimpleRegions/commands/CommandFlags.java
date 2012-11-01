@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import dries007.SimpleCore.Permissions;
 import dries007.SimpleCore.SimpleCore;
 import dries007.SimpleRegions.SimpleRegions;
 import dries007.SimpleRegions.actions.*;
@@ -110,8 +111,8 @@ public class CommandFlags extends CommandBase
 		}
 	}
 		
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
-	{
-		return true;
-	}
+	public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SR.all");
+    }
 }

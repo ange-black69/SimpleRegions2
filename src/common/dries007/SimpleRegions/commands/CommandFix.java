@@ -35,9 +35,9 @@ public class CommandFix extends CommandBase
         return getCommandName() + " <radius>";
     }
     
-    public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
     {
-        return true;
+    	return Permissions.hasPermission(sender.getCommandSenderName(), "SR.all");
     }
 
     public void processCommand(ICommandSender sender, String[] args)
