@@ -39,16 +39,16 @@ public class CommandRegion extends CommandBase
 		
 			if (regionSelection.hasKey("pos1")&&regionSelection.hasKey("pos2"))
 			{
-				if (SimpleRegions.regionData.hasKey(args[0]))
+				if (SimpleRegions.regionData.hasKey(args[1]))
 				{
 					throw new WrongUsageException("Region name already used.");
 				}
 				else
 				{
 					regionSelection.setString("Owner", sender.getCommandSenderName());
-					SimpleRegions.regionData.setCompoundTag(args[0], regionSelection); 
+					SimpleRegions.regionData.setCompoundTag(args[1], regionSelection); 
 				}
-				sender.sendChatToPlayer("Region " + args[0] + " added. You have been set as owner.");
+				sender.sendChatToPlayer("Region " + args[1] + " added. You have been set as owner.");
 			}
 			else
 			{
@@ -57,27 +57,27 @@ public class CommandRegion extends CommandBase
 		}
 		else if(args[0].equalsIgnoreCase("remove"))
 		{
-			if(SimpleRegions.regionData.hasKey(args[0]))
+			if(SimpleRegions.regionData.hasKey(args[1]))
 			{
 				NBTTagCompound newData = new NBTTagCompound();
 				Iterator i = SimpleRegions.regionData.getTags().iterator();
 				while(i.hasNext())
 				{
 					NBTBase tag = (NBTBase) i.next();
-					if (!tag.getName().equals(args[0]))
+					if (!tag.getName().equals(args[1]))
 					{
-						newData.setTag(args[0], tag);
+						newData.setTag(args[1], tag);
 					}
 					else
 					{
-						sender.sendChatToPlayer("Region " + args[0] + " removed.");
+						sender.sendChatToPlayer("Region " + args[1] + " removed.");
 						return;
 					}
 				}
 			}
 			else
 			{
-				sender.sendChatToPlayer("Region " + args[0] + " not found!");
+				sender.sendChatToPlayer("Region " + args[1] + " not found!");
 			}
 		}
 		else
