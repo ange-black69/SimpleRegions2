@@ -11,7 +11,6 @@ import net.minecraft.src.*;
 
 public class ItemWand extends Item
 {
-	
 	protected ItemWand(int i) 
 	{
 		super(i);
@@ -45,7 +44,9 @@ public class ItemWand extends Item
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, List list) 
 	{
-		if(stack.getTagCompound()==null)
+		try
+		{
+			if(stack.getTagCompound()==null)
 		{
 			stack.setTagCompound(new NBTTagCompound());
 		}
@@ -65,6 +66,8 @@ public class ItemWand extends Item
 				list.add(realTag.getName() + "=" +realTag.data);
 			}
 		}
+		}
+		catch(Exception e){}
 	}	
 	
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) 
@@ -75,67 +78,75 @@ public class ItemWand extends Item
 	
 	public boolean onBlockStartBreak(ItemStack stack, int X, int Y, int Z, EntityPlayer player) 
     {
-		if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return true;
-			
-		if(stack.getItemDamage()==0)
+		try
 		{
-			stack.setItemDamage(1);
-		}
-		
-		NBTTagCompound tag = stack.getTagCompound();
-		
-		if(tag==null)
-		{
-			tag = new NBTTagCompound();
-		}
-		
-		if(tag.getInteger("dim")!=player.dimension)
-		{
-			tag = new NBTTagCompound();
-		}
-		
-		NBTTagCompound pos1 = new NBTTagCompound();
-			pos1.setInteger("X", X);
-			pos1.setInteger("Y", Y);
-			pos1.setInteger("Z", Z);
-		tag.setCompoundTag("pos1", pos1);
-		tag.setInteger("dim", player.dimension);
+			if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return true;
 			
-		player.sendChatToPlayer("Pos1: X=" + X + " Y=" + Y + " Z=" + Z);
+			if(stack.getItemDamage()==0)
+			{
+				stack.setItemDamage(1);
+			}
+		
+			NBTTagCompound tag = stack.getTagCompound();
+		
+			if(tag==null)
+			{
+				tag = new NBTTagCompound();
+			}
+		
+			if(tag.getInteger("dim")!=player.dimension)
+			{
+				tag = new NBTTagCompound();
+			}
+		
+			NBTTagCompound pos1 = new NBTTagCompound();
+				pos1.setInteger("X", X);
+				pos1.setInteger("Y", Y);
+				pos1.setInteger("Z", Z);
+			tag.setCompoundTag("pos1", pos1);
+			tag.setInteger("dim", player.dimension);
 			
-		stack.setTagCompound(tag);
+			player.sendChatToPlayer("Pos1: X=" + X + " Y=" + Y + " Z=" + Z);
+			
+			stack.setTagCompound(tag);
+		}
+		catch(Exception e){}
 		return true;
     }
 	
 
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) 
-	{	
-		if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return false;
-		 
-		NBTTagCompound tag = stack.getTagCompound();
-		NBTTagCompound newTag = new NBTTagCompound();
-		newTag.setInteger("dim", player.dimension);
-		Iterator i = tag.getTags().iterator();
-		while(i.hasNext())
+	{
+		try
 		{
-			NBTBase next = (NBTBase) i.next();
-			if (next.getId()==10) //compound
+			if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return false;
+		 
+			NBTTagCompound tag = stack.getTagCompound();
+			NBTTagCompound newTag = new NBTTagCompound();
+			newTag.setInteger("dim", player.dimension);
+			Iterator i = tag.getTags().iterator();
+			while(i.hasNext())
 			{
-				NBTTagCompound realTag = (NBTTagCompound) next;
-				if(realTag.getName().equals("pos1"))
+				NBTBase next = (NBTBase) i.next();
+				if (next.getId()==10) //compound
 				{
-					newTag.setCompoundTag("pos1", realTag);
+					NBTTagCompound realTag = (NBTTagCompound) next;
+					if(realTag.getName().equals("pos1"))
+					{
+						newTag.setCompoundTag("pos1", realTag);
+					}	
 				}
 			}
-		}
 		
-		NBTTagCompound pos2 = new NBTTagCompound();
-			pos2.setInteger("X", x);
-			pos2.setInteger("Y", y);
-			pos2.setInteger("Z", z);
-		newTag.setCompoundTag("pos2", pos2);
-		stack.setTagCompound(newTag);
-		player.sendChatToPlayer("Pos2: X=" + x + " Y=" + y + " Z=" + z);
+			NBTTagCompound pos2 = new NBTTagCompound();
+				pos2.setInteger("X", x);
+				pos2.setInteger("Y", y);
+				pos2.setInteger("Z", z);
+			newTag.setCompoundTag("pos2", pos2);
+			stack.setTagCompound(newTag);
+			player.sendChatToPlayer("Pos2: X=" + x + " Y=" + y + " Z=" + z);
+		}
+		catch(Exception e){}
 		return true;
 	}    	
 
