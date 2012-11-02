@@ -8,7 +8,6 @@ import java.util.List;
 
 import dries007.SimpleCore.Permissions;
 import dries007.SimpleCore.SimpleCore;
-import dries007.SimpleCore.color;
 import dries007.SimpleRegions.SimpleRegions;
 import dries007.SimpleRegions.actions.*;
 import dries007.SimpleRegions.regions.API;
@@ -44,7 +43,7 @@ public class CommandFlags extends CommandBase
 			while(i.hasNext())
 			{
 				String flag = i.next();
-				sender.sendChatToPlayer(color.DARK_GREEN + flag + color.WHITE + "-" + API.getFlagHelp(flag));
+				sender.sendChatToPlayer(dries007.SimpleCore.Color.DARK_GREEN + flag + dries007.SimpleCore.Color.WHITE + "-" + API.getFlagHelp(flag));
 			}
 			return;
 		}
