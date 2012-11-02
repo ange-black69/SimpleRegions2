@@ -1,5 +1,6 @@
 package dries007.SimpleRegions;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,13 +17,16 @@ import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
+import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
+import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.*;
@@ -117,6 +121,25 @@ public class SimpleRegions extends DummyModContainer
 		data.saveData(regionData, "regionData");
 	}
 	
+	@ForgeSubscribe
+	public void playerInteractin(PlayerInteractEvent event)
+	{
+		World world = event.entityPlayer.worldObj;
+		if(world.isRemote) return;
+		if(world.getBlockId(event.x, event.y, event.z) == Block.chest.blockID)
+		{
+			if(VanillaInterface.hasTag(world, event.x, event.y, event.z, "nochest", event.entityPlayer))
+			{
+				((EntityPlayerMP)event.entityPlayer).sendChatToPlayer("You are not allowed to open chests in this region");
+				event.setResult(Result.DENY);
+				event.useBlock = Result.DEFAULT;
+				event.useItem = Result.DEFAULT;
+				event.setCanceled(true);
+				((EntityPlayerMP)event.entityPlayer).closeScreen();
+			}
+		}
+	}
+	
 	public void addFlags()
 	{
 		API.addFlag("nofirespread", "This flag turns off firespread in this region. Mod needs to be a code mod for this!");		//1
@@ -127,6 +150,7 @@ public class SimpleRegions extends DummyModContainer
 		API.addFlag("godmode", "This flag makes all players invincible in this region. Overrules pvp.");						//6
 		API.addFlag("nopvp", "This flag makes pvp impossible in this region.");													//7
 		API.addFlag("nofalldamage", ";-)");																						//8
+		API.addFlag("nochest", "This tag makes opening chest impossible");														//9
 	}
 	
 	public void addCommands()

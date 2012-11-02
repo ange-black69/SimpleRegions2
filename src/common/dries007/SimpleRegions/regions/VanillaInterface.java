@@ -17,6 +17,7 @@ public class VanillaInterface
 	 */
 	public static boolean hasTag(World world, int X, int Y, int Z, String tag)
 	{
+		if (world.isRemote) return true;
 		int dim = world.getWorldInfo().getDimension();
 		
 		String region = API.getRegion(dim, X, Y, Z);
@@ -43,6 +44,7 @@ public class VanillaInterface
 	 */
 	public static boolean hasTag(World world, int X, int Y, int Z, String tag, EntityPlayer player)
 	{
+		if (world.isRemote) return true; 
 		int dim = world.getWorldInfo().getDimension();
 		
 		String region = API.getRegion(dim, X, Y, Z);
@@ -73,6 +75,7 @@ public class VanillaInterface
 	 */
 	public static boolean hasTag(World world,String tag, EntityPlayer player, boolean ownerOrMember)
 	{
+		if (world.isRemote) return true;
 		int dim = world.getWorldInfo().getDimension();
 		
 		String region = API.getRegion(dim, ((Double) player.posX).intValue(), ((Double) player.posY).intValue(), ((Double) player.posZ).intValue());
