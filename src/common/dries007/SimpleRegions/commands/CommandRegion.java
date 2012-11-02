@@ -46,9 +46,10 @@ public class CommandRegion extends CommandBase
 				else
 				{
 					regionSelection.setString("Owner", sender.getCommandSenderName());
-					SimpleRegions.regionData.setCompoundTag(args[1], regionSelection); 
+					SimpleRegions.regionData.setCompoundTag(args[1], regionSelection);
+					SimpleRegions.availableRegions.add(args[1]);
+					sender.sendChatToPlayer("Region " + args[1] + " added. You have been set as owner.");
 				}
-				sender.sendChatToPlayer("Region " + args[1] + " added. You have been set as owner.");
 			}
 			else
 			{
@@ -71,6 +72,7 @@ public class CommandRegion extends CommandBase
 					else
 					{
 						sender.sendChatToPlayer("Region " + args[1] + " removed.");
+						SimpleRegions.availableRegions.remove(tag.getName());
 						return;
 					}
 				}

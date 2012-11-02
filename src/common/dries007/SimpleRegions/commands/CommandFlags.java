@@ -1,5 +1,6 @@
 package dries007.SimpleRegions.commands;
 
+import java.awt.Color;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import dries007.SimpleCore.Permissions;
 import dries007.SimpleCore.SimpleCore;
+import dries007.SimpleCore.color;
 import dries007.SimpleRegions.SimpleRegions;
 import dries007.SimpleRegions.actions.*;
 import dries007.SimpleRegions.regions.API;
@@ -27,8 +29,9 @@ public class CommandFlags extends CommandBase
 	
 	public void processCommand(ICommandSender sender, String[] args)
 	{
-		//   0 = List, 1 = Help, 2 = Status, 3 = Set Status
-		if(args.length>3)
+		if(getCommandSenderAsPlayer(sender).worldObj.isRemote) return;
+		//   0 = List, 1 = none, 2 = Status, 3 = Set Status
+		if(args.length>3 || args.length==1)
 		{
 			throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 		}
@@ -36,36 +39,18 @@ public class CommandFlags extends CommandBase
 		//FlagList
 		if(args.length==0)
 		{
-			sender.sendChatToPlayer("Use: " + getCommandUsage(sender));
 			sender.sendChatToPlayer("List of available flags:");
-			sender.sendChatToPlayer("Use //flags <flag> for help.");
-			String msg = "";
 			Iterator<String> i = API.getFlagList().iterator();
 			while(i.hasNext())
 			{
-				if (msg.equals("")) msg = i.next();
-				else msg = msg + ", " + i.next();
-			}
-			sender.sendChatToPlayer(msg);
-			return;
-		}
-		
-		//FlagHelp
-		if(args.length==1)
-		{
-			if(API.getFlagList().contains(args[0].toLowerCase()))
-			{
-				sender.sendChatToPlayer(args[0] + " help: " + API.getFlagHelp(args[0].toLowerCase()));
-			}
-			else
-			{
-				throw new WrongUsageException("That flag doesn't exist.", new Object[0]);
+				String flag = i.next();
+				sender.sendChatToPlayer(color.DARK_GREEN + flag + color.WHITE + "-" + API.getFlagHelp(flag));
 			}
 			return;
 		}
 		
 		//Rest
-		if(SimpleCore.rankData.hasKey(args[0]))
+		if(!SimpleCore.rankData.hasKey(args[0].trim()))
 		{
 			throw new WrongUsageException("Region " + args[0] + " doesn't exist!", new Object[0]);
 		}
@@ -110,6 +95,25 @@ public class CommandFlags extends CommandBase
 			SimpleRegions.regionData.setCompoundTag(region.getName(), region);
 		}
 	}
+	
+	 public List addTabCompletionOptions(ICommandSender sender, String[] args)
+	 {
+		 if(args.length == 1)
+		 {
+			 String msg = "";
+			 for(String st :  SimpleRegions.getRegions()) msg = msg + st + ", ";
+			 sender.sendChatToPlayer("List of regions: " + msg);
+			 return getListOfStringsMatchingLastWord(args, SimpleRegions.getRegions());
+		 }
+		 else if(args.length == 2)
+		 {
+			 String msg = "";
+			 for(String st :  SimpleRegions.getFlags()) msg = msg + st + ", ";
+			 sender.sendChatToPlayer("List of flags: " + msg);
+			 return getListOfStringsMatchingLastWord(args, SimpleRegions.getFlags());
+		 }
+		 return null;
+	 }
 		
 	public boolean canCommandSenderUseCommand(ICommandSender sender)
     {

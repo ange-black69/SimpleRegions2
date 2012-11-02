@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,6 +60,7 @@ public class SimpleRegions extends DummyModContainer
 	
 	public static int opID;
 	public static Map<String, String> availableFlags = new HashMap();
+	public static Set<String> availableRegions = new HashSet();
 	
 	public SimpleRegions()
 	{
@@ -91,6 +93,7 @@ public class SimpleRegions extends DummyModContainer
 		ItemWand = new ItemWand(ItemWandID);
 		LanguageRegistry.addName(ItemWand, "Wand");
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemWand, 1), new Object[] {new ItemStack(Item.stick, 1)});
+		MinecraftForge.EVENT_BUS.register(new VanillaInterface());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -119,25 +122,6 @@ public class SimpleRegions extends DummyModContainer
 	public void chuckSave(WorldEvent.Save event)
 	{
 		data.saveData(regionData, "regionData");
-	}
-	
-	@ForgeSubscribe
-	public void playerInteractin(PlayerInteractEvent event)
-	{
-		World world = event.entityPlayer.worldObj;
-		if(world.isRemote) return;
-		if(world.getBlockId(event.x, event.y, event.z) == Block.chest.blockID)
-		{
-			if(VanillaInterface.hasTag(world, event.x, event.y, event.z, "nochest", event.entityPlayer))
-			{
-				((EntityPlayerMP)event.entityPlayer).sendChatToPlayer("You are not allowed to open chests in this region");
-				event.setResult(Result.DENY);
-				event.useBlock = Result.DEFAULT;
-				event.useItem = Result.DEFAULT;
-				event.setCanceled(true);
-				((EntityPlayerMP)event.entityPlayer).closeScreen();
-			}
-		}
 	}
 	
 	public void addFlags()
@@ -179,14 +163,24 @@ public class SimpleRegions extends DummyModContainer
 	}
 	
 	 public static float rot(float par0)
-	    {
-	    	par0 %= 360.0F;
-	    	if (par0<0)
-	    	{
-	    		par0 +=360.0F;
-	    	}
-	        return par0;
-	    }
+	 {
+		 par0 %= 360.0F;
+		 if (par0<0)
+		 {
+			 par0 +=360.0F;
+		 }
+		 return par0;
+	 }
+	 
+	public static String[] getRegions()
+	{
+		return availableRegions.toArray(new String[availableRegions.size()]);
+	}
+	
+	public static String[] getFlags()
+	{
+		return availableFlags.keySet().toArray(new String[availableFlags.size()]);
+	}
 	
 	public static boolean saveData(NBTTagCompound data, String subfolder)
 	{
@@ -267,38 +261,5 @@ public class SimpleRegions extends DummyModContainer
 		return false;
 	}
 	
-	@ForgeSubscribe
-	public void godmode(LivingHurtEvent event)
-	{
-		EntityLiving entity = event.entityLiving;
-		if (entity instanceof EntityPlayer)
-		{
-			if(VanillaInterface.hasTag(entity.worldObj, "godmode", (EntityPlayer) entity, false))
-			{
-				event.setCanceled(true);
-			}
-		}
-		
-		if(event.source == DamageSource.fall)
-		{
-			if(VanillaInterface.hasTag(entity.worldObj, ((Double) entity.posX).intValue(), ((Double) entity.posY).intValue(), ((Double) entity.posZ).intValue(), "nofalldamage"))
-			{
-				event.setCanceled(true);
-			}
-		}
-	}
-	
-	@ForgeSubscribe
-	public void pvp(AttackEntityEvent event) 
-	{
-		Entity target = event.target;
-		if (target instanceof EntityPlayer)
-		{
-			if(VanillaInterface.hasTag(target.worldObj, "nopvp", (EntityPlayer) target, false))
-			{
-				event.setCanceled(true);
-			}
-		}
-	}
-	
+
 }
