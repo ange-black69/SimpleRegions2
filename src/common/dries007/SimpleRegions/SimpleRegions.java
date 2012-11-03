@@ -42,9 +42,6 @@ import dries007.SimpleRegions.regions.VanillaInterface;
 
 public class SimpleRegions extends DummyModContainer 
 {
-	@SidedProxy(clientSide = "dries007.SimpleRegions.ClientProxy", serverSide = "dries007.SimpleRegions.CommonProxy")
-	public static CommonProxy proxy;
-	
 	public static Integer ItemWandID;
 	public static Item ItemWand; 
 	
@@ -139,6 +136,8 @@ public class SimpleRegions extends DummyModContainer
 	
 	public void addCommands()
 	{
+		if(!FMLCommonHandler.instance().getEffectiveSide().isServer()) return;
+		
 		ICommandManager commandManager = server.getCommandManager();
 		ServerCommandManager manager = ((ServerCommandManager) commandManager); 
 		
