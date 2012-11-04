@@ -54,7 +54,7 @@ public class VanillaInterface
 		World world = event.entityPlayer.worldObj;
 		if(world.isRemote) return;
 		
-		event.entityPlayer.sendChatToPlayer("" + event.action.toString() + "");
+		
 		
 		if(event.action!=event.action.RIGHT_CLICK_BLOCK) return;
 		
